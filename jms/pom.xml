@@ -1,0 +1,88 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.os.javaee</groupId>
+	<artifactId>jms</artifactId>
+	<version>0.1.0.0</version>
+	<packaging>war</packaging>
+
+	<name>javaee7-jms</name>
+
+	<properties>
+		<sourceLevel>1.7</sourceLevel>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+	</properties>
+
+	<developers>
+		<developer>
+			<name>Murali Reddy</name>
+			<email>kvmkreddy@gmail.com</email>
+			<organization>Open Source Development</organization>
+		</developer>
+	</developers>
+
+	<repositories>
+	<!-- 
+		<repository>
+			<id>snapshot-repository.java.net</id>
+			<name>Java.net Snapshot Repository for Maven</name>
+			<url>https://maven.java.net/content/repositories/snapshots/</url>
+			<layout>default</layout>
+		</repository>
+		-->
+		<repository>
+			<id>public-repository.java.net</id>
+			<name>Java.net Public Repository for Maven</name>
+			<url>https://maven.java.net/content/groups/public/</url>
+			<layout>default</layout>
+		</repository>		
+	</repositories>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>		
+		</plugins>
+	</build>
+	<dependencies>
+
+		<!-- Java Message Service 2.0 -->
+		<!--
+		<dependency> 
+			<groupId>org.glassfish</groupId> 
+			<artifactId>javax.jms</artifactId> 
+			<version>4.0-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		-->
+		<dependency>
+			<groupId>javax.jms</groupId>
+			<artifactId>javax.jms-api</artifactId>
+			<version>2.0</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+		  <groupId>javax.ejb</groupId>
+		  <artifactId>javax.ejb-api</artifactId>
+		  <version>3.2</version>
+		  <scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+		  <groupId>javax</groupId>
+		  <artifactId>javaee-api</artifactId>
+		  <version>7.0</version>
+		  <scope>provided</scope>
+		</dependency>				
+	</dependencies>
+</project>

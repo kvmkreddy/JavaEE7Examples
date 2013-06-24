@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
+        <h1>Using the JMS 1.1 API<br> to send a message (ClassicJMSSender)</h1>
+        <p>Here is a simple Java EE session bean which demonstrates how to use the JMS 1.1 API to send a message.
+
+        <pre>
+			@Local(value=IJMSSender.class)
+			@Stateless(name="classicJMSSender")
+			public class ClassicJMSSender implements IJMSSender {
+			
+			    @Resource(lookup = "java:global/jms/demoConnectionFactory")
+			    ConnectionFactory connectionFactory;
+			    
+			    @Resource(lookup = "java:global/jms/demoQueue")
+			    Queue demoQueue;
+			    
+			    public void sendMessage(String body) {
+			        try {
+			            Connection connection = connectionFactory.createConnection();
+			            try {
+			                Session session = connection.createSession(false,Session.AUTO_ACKNOWLEDGE);
+			                MessageProducer messageProducer = session.createProducer(demoQueue);
+			                TextMessage textMessage = session.createTextMessage(body);
+			                messageProducer.send(textMessage);
+			            } finally {
+			                connection.close();
+			            }
+			        } catch (JMSException ex) {
+			            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+			        }
+			    }
+			}
+		</pre>
+        <p>This example shows:
+        <ul>
+        <li>Use of the JMS 1.1-style API for sending a message (<tt>Connection</tt>, <tt>Session</tt>, <tt>MessageProducer</tt>)</li>
+        <li><b>9 lines of code to send a message</b> (excluding exception handling)</li>
+        <li>Need to create all three objects explicitly and then call close after use</li>
+        <li>Parameters to <tt>createSession</tt> are required but are ignored in a JTA transaction</li>
+        <li>Need to explicitly create a <tt>Message</tt> of the appropriate type (i.e. <tt>TextMessage</tt>) and set its payload</li>
+        <li>JMS 1.1 requires a <tt>try...finally</tt> block to ensure <tt>close</tt> is called, 
+        though in JMS 2.0 a Java 7 "try-with-resources" block 
+        can be used to avoid an explicit <tt>close()</tt>.
+        <li>Includes an additional <tt>try...catch</tt> block to catch and log exceptions.<br>
+        </ul>
+<p>This example is for Java EE but the API for Java SE is similar
+<p><img src="arrow.gif">&nbsp;<a href="SimplifiedJMSSender.html">Now compare this with using the JMS 2.0 simplified API to do the same thing</a>
+<p><img src="arrow.gif">&nbsp;<a href="JMSDemoServlet?option=ClassicJMSSender">Run this example</a>
+<p><a href="/JavaEE7JMSDemo/">Java EE 7 - JMS 2.0 examples home</a>
+</body>
+</html>

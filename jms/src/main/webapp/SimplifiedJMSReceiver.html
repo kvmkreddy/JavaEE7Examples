@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
+        <h1>Using the JMS 2.0 simplified API<br> to receive a message (SimplifiedJMSReceiver)</h1>
+        <p>Here is a simple Java EE session bean which demonstrates how to use the JMS 2.0 simplified API to synchronously receive a message.
+        <pre>
+			@Local(value=IJMSReceiver.class)
+			@Stateless(name="simplifiedJMSReceiver")
+			public class SimplifiedJMSReceiver implements IJMSReceiver{
+			
+			    @Resource(lookup = "java:global/jms/demoConnectionFactory")
+			    ConnectionFactory connectionFactory;
+			    @Resource(lookup = "java:global/jms/demoQueue")
+			    Queue demoQueue;
+			
+				public String receiveMessage() {
+			        try (JMSContext context = connectionFactory.createContext();){
+			            JMSConsumer consumer = context.createConsumer(demoQueue);
+			            return "Received " + consumer.receiveBody(String.class, 1000);
+			        } catch (JMSRuntimeException ex) {
+			            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+			        }
+			        return null;	
+			    }
+			}
+		</pre>
+        <p>This example shows:
+        <ul>
+        <li>Use of a <tt>JMSContext</tt> for receiving a message instead of separate <tt>Connection</tt> and <tt>Session</tt> objects
+        <li><tt>JMSContext</tt> is created explicitly and then closed after use</li>
+        <li>No need to specify <tt>transacted</tt> and <tt>acknowledgeMode</tt> parameters (unlike with <tt>createSession</tt>) in Java EE </li>
+        <li>No need to cast the received message to a <tt>TextMessage</tt>  and extract its payload:  message payload is returned directly by the <tt>receive</tt> method</li>
+        <li>No need to call <tt>context.close()</tt> as the use of a "try-with-resources" block means the <tt>JMSContext</tt> is automatically closed at the end of the block</li>
+        <li>Includes a <tt>catch</tt> block to catch and log exceptions.<br>
+        </ul>
+        <p>This example is for Java EE but the API for Java SE is similar
+        <p><img src="arrow.gif">&nbsp;<a href="SimplifiedJMSReceiverCDI.html">Now compare this with using the JMS 2.0 simplified API and injection to do the same thing</a>
+        <p><img src="arrow.gif">&nbsp;<a href="JMSDemoServlet?option=SimplifiedJMSReceiver">Run this example</a>
+        <p><a href="/JavaEE7JMSDemo/">Java EE 7 - JMS 2.0 examples home</a>
+
+    </body>
+</html>

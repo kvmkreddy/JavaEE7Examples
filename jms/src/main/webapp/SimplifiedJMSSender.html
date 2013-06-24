@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
+        <h1>Using the JMS 2.0 simplified API<br> to send a message (SimplifiedJMSSender)</h1>
+        <p>Here is a simple Java EE session bean which demonstrates how to use the JMS 2.0 simplified API to send a message.
+        <pre>
+			@Local(value=IJMSSender.class)
+			@Stateless(name="simplifiedJMSSender")
+			public class SimplifiedJMSSender implements IJMSSender{
+			
+			    @Resource(lookup = "java:global/jms/demoConnectionFactory")
+			    ConnectionFactory connectionFactory;
+			    
+			    @Resource(lookup = "java:global/jms/demoQueue")
+			    Queue demoQueue;
+			    
+			    public void sendMessage(String body) {
+			        try (JMSContext context = connectionFactory.createContext();){
+			            context.createProducer().send(demoQueue, body);
+			        } catch (JMSRuntimeException ex) {
+			            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+			        }
+			    }	
+			}
+		</pre>
+        <p>This example shows:
+        <ul>
+        <li>Use of a JMS 2.0 <tt>JMSContext</tt> for sending a message instead of separate <tt>Connection</tt> and <tt>Session</tt> objects
+        <li><b>2 lines of code to send a message</b> (excluding exception handling)</li>
+        <li><tt>JMSContext</tt> is created explicitly (in a "try-with-resources" block)
+        <li>No need to specify <tt>transacted</tt> and <tt>acknowledgeMode</tt> parameters (unlike with <tt>createSession</tt>) in Java EE </li>
+        <li>No need to create a <tt>TextMessage</tt> object: message payload is passed directly to the <tt>send</tt> method</li>
+        <li>No need to call <tt>context.close()</tt> as the use of a "try-with-resources" block means the <tt>JMSContext</tt> is automatically closed at the end of the block</li>
+        <li>Includes a <tt>catch</tt> block to catch and log exceptions.<br>
+        </ul>
+        <p>This example is for Java EE but the API for Java SE is similar
+        <p><img src="arrow.gif">&nbsp;<a href="SimplifiedJMSCDISender.html">Now compare this with using the JMS 2.0 simplified API and injection do the same thing</a>
+        <p><img src="arrow.gif">&nbsp;<a href="JMSDemoServlet?option=SimplifiedJMSSender">Run this example</a>
+        <p><a href="/JavaEE7JMSDemo/">Java EE 7 - JMS 2.0 examples home</a>
+    </body>
+</html>
