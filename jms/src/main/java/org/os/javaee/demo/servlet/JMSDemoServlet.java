@@ -49,9 +49,11 @@ public class JMSDemoServlet extends HttpServlet {
 	@EJB(beanName="simplifiedJMSCDISender") private IJMSSender simplifiedJMSCDISender;
 	@EJB(beanName="classicJMSSender") private IJMSSender classicJMSSender;
 	@EJB(beanName="simplifiedJMSAsyncSender") private IJMSSender simplifiedJMSAsyncSender;
+	@EJB(beanName="simplifiedJMSCDISenderWithProperties") private IJMSSender simplifiedJMSCDISenderWithProperties;
 	
 	@EJB(beanName="simplifiedJMSReceiver") private IJMSReceiver simplifiedJMSReceiver;
 	@EJB(beanName="simplifiedJMSCDIReceiver") private IJMSReceiver simplifiedJMSCDIReceiver;
+	@EJB(beanName="simplifiedJMSCDIReceiverWithProperties") private IJMSReceiver simplifiedJMSCDIReceiverWithProperties;
 	
 	// Inject a JMSContext to use - this will use the platform default connection factory
     @Inject JMSContext context;
@@ -109,14 +111,10 @@ public class JMSDemoServlet extends HttpServlet {
         }
     }
 	
-    /** 
-     * Returns a short description of the servlet.
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "JMS 2.0 Demo Servlet.";
-    }// </editor-fold>
+    }
 
     private void handle(String option,PrintWriter out) throws Exception {
         String result = "";
@@ -142,13 +140,13 @@ public class JMSDemoServlet extends HttpServlet {
                 out.println("Message successfully sent<br/>");    
                 out.println("Number of messages on queue after: "+ getQueueDepth()+"<br/>");
                 break;   
-           /* case "JavaEESenderOldWithProperties":
-                out.println("<h1>Using the JMS 1.1-style API<br> to send a message,<br>setting delivery options and message properties (JavaEESenderOldWithProperties)</h1>");
+            case "SimplifiedJMSCDISenderWithProperties":
+                out.println("<h1>Using the JMS 2.0 simplified API<br> to send a message,<br>setting delivery options and message properties (SimplifiedJMSCDISenderWithProperties)</h1>");
                 out.println("<p>Number of messages on queue before: "+ getQueueDepth()+"<br/>");
-                //javaEESenderOldWithProperties.sendMessageOldWithProperties("JavaEESenderOldWithProperties");
+                simplifiedJMSCDISenderWithProperties.sendMessage("I sent from Simplified JMS CDI Sender With Properties");
                 out.println("Message successfully sent<br/>");
                 out.println("Number of messages on queue after: "+ getQueueDepth()+"<br/>");
-                break;*/
+                break;
             case "SimplifiedJMSAsyncSender":
                 out.println("<h1>Using the JMS 2.0 simplified API with injection<br> to send a message,<br>setting delivery options and message properties (SimplifiedJMSAsyncSender)</h1>");
                 out.println("<p>Number of messages on queue before: "+ getQueueDepth()+"<br/>");
@@ -156,13 +154,6 @@ public class JMSDemoServlet extends HttpServlet {
                 out.println("Message sent<br/>");     
                 out.println("Number of messages on queue after: "+ getQueueDepth()+"<br/>");
                 break;                 
-            /*case "JavaEESyncReceiverOld":
-                out.println("<h1>Using the JMS 1.1-style API<br> to receive a message (JavaEESyncReceiverOld)</h1>");
-                out.println("<p>Number of messages on queue before: "+ getQueueDepth()+"<br/>");
-                //result = javaEESyncReceiverOld.receiveMessageOld();
-                out.println("Message received: "+result+"<br/>"); 
-                out.println("Number of messages on queue after: "+ getQueueDepth()+"<br/>");
-                break;*/
             case "SimplifiedJMSReceiver":
                 out.println("<h1>Using the JMS 2.0 simplified API<br> to receive a message (SimplifiedJMSReceiver)</h1>");
                 out.println("<p>Number of messages on queue before: "+ getQueueDepth()+"<br/>");
@@ -177,13 +168,13 @@ public class JMSDemoServlet extends HttpServlet {
                 out.println("Message received: "+result+"<br/>"); 
                 out.println("Number of messages on queue after: "+ getQueueDepth()+"<br/>");
                 break;
-         /*  case "JavaEESyncReceiverNewCDIWithProperties":
-                out.println("<h1>Using the JMS 2.0 simplified API and injection<br> to receive a message,<br>displaying message properties (JavaEESyncReceiverNewCDIWithProperties)</h1>");
+           case "SimplifiedJMSCDIReceiverWithProperties":
+                out.println("<h1>Using the JMS 2.0 simplified API and injection<br> to receive a message,<br>displaying message properties (SimplifiedJMSCDIReceiverWithProperties)</h1>");
                 out.println("<p>Number of messages on queue before: "+ getQueueDepth()+"<br/>");
-                //result = javaEESyncReceiverNewCDIWithProperties.receiveMessageNewCDIWithProperties();
+                result = simplifiedJMSCDIReceiverWithProperties.receiveMessage();
                 out.println("Message received: "+result+"<br/>"); 
                 out.println("Number of messages on queue after: "+ getQueueDepth()+"<br/>");
-                break;*/
+                break;
             default:
                 throw new Exception("Unexpected option "+option);
         }
