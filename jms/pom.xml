@@ -24,14 +24,6 @@
 	</developers>
 
 	<repositories>
-	<!-- 
-		<repository>
-			<id>snapshot-repository.java.net</id>
-			<name>Java.net Snapshot Repository for Maven</name>
-			<url>https://maven.java.net/content/repositories/snapshots/</url>
-			<layout>default</layout>
-		</repository>
-		-->
 		<repository>
 			<id>public-repository.java.net</id>
 			<name>Java.net Public Repository for Maven</name>
@@ -55,15 +47,6 @@
 	</build>
 	<dependencies>
 
-		<!-- Java Message Service 2.0 -->
-		<!--
-		<dependency> 
-			<groupId>org.glassfish</groupId> 
-			<artifactId>javax.jms</artifactId> 
-			<version>4.0-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-		-->
 		<dependency>
 			<groupId>javax.jms</groupId>
 			<artifactId>javax.jms-api</artifactId>
